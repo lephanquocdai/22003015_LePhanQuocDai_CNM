@@ -1,0 +1,19 @@
+<h2>✏️ Sửa Sản phẩm</h2>
+<form method="post">
+    <div class="form-group">
+        <label for="name">Tên Sản phẩm</label>
+        <input type="text" id="name" name="name" value="<%= product.name %>" required placeholder="Nhập tên sản phẩm">
+    </div>
+    <div class="form-group">
+        <label for="price">Giá (đ)</label>
+        <input type="number" id="price" name="price" value="<%= product.price %>" required placeholder="Nhập giá sản phẩm" min="0">
+    </div>
+    <div class="form-group">
+        <label for="quantity">Số lượng</label>
+        <input type="number" id="quantity" name="quantity" value="<%= product.quantity %>" required placeholder="Nhập số lượng" min="0">
+    </div>
+    <div class="btn-group">
+        <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+        <a href="/" class="back-link">⬅ Quay lại</a>
+    </div>
+</form>

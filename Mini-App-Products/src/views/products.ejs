@@ -1,0 +1,50 @@
+<h2>📦 Danh sách Sản phẩm</h2>
+
+<div class="search-box">
+    <form method="get" action="/" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        <input type="text" name="search" placeholder="🔍 Tìm kiếm sản phẩm..." value="<%= search || '' %>">
+        <button type="submit">Tìm kiếm</button>
+    </form>
+</div>
+
+<div class="btn-group">
+    <a href="/add" class="btn btn-add">➕ Thêm sản phẩm</a>
+</div>
+
+<% if (products.length === 0) { %>
+    <div class="no-results">
+        <p>Không tìm thấy sản phẩm nào</p>
+    </div>
+    <% } else { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ảnh</th>
+                    <th>Tên Sản phẩm</th>
+                    <th>Giá (đ)</th>
+                    <th>Số lượng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% products.forEach(p => { %>
+                    <tr>
+                        <td><img src="<%= p.url_image %>" width="80" height="80"></td>
+                        <td><strong><%= p.name %></strong></td>
+                        <td>
+                            <%= p.price.toLocaleString('vi-VN') %>
+                        </td>
+                        <td>
+                            <%= p.quantity %>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="/edit/<%= p.id %>">✏️ Sửa</a>
+                                <a href="/delete/<%= p.id %>" class="delete" onclick="return confirm('Xác nhận xóa?')">🗑️ Xoá</a>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+        <% } %>
