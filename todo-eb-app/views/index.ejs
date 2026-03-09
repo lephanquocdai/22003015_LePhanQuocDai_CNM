@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Todo App AWS</title>
+</head>
+
+<body>
+
+<h1>Todo List</h1>
+
+<form action="/add" method="POST">
+    <input name="title" placeholder="Enter todo">
+    <button>Add</button>
+</form>
+
+<ul>
+<% todos.forEach(todo => { %>
+
+<li>
+
+<%= todo.title %>
+
+<form action="/toggle" method="POST" style="display:inline;">
+<input type="hidden" name="todoId" value="<%= todo.todoId %>">
+<button>Done</button>
+</form>
+
+</li>
+
+<% }) %>
+</ul>
+
+</body>
+</html>
