@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Management</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
+            padding: 30px;
+        }
+        
+        header {
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .subtitle {
+            color: #555;
+        }
+        
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            text-decoration: none;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-plus {
+            background: #28a745;
+        }
+        
+        .btn-home {
+            background: #667eea;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #222;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-sm {
+            font-size: .85rem;
+            padding: 6px 10px;
+        }
+        
+        .bar {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .bar input {
+            width: 250px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        
+        .alert {
+            margin: 15px 0;
+            padding: 12px 15px;
+            border-radius: 6px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .table-wrap {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        thead {
+            background: #f5f5f5;
+        }
+        
+        tr:hover {
+            background: #f9fafb;
+        }
+        
+        .img-thumb {
+            width: 90px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Product Management</h1>
+        </header>
+
+        <div class="top-actions">
+            <a href="/add" class="btn btn-plus">➕ Add Product</a>
+            <form action="/" method="GET" class="bar" style="margin:0;">
+                <input type="text" name="q" placeholder="Search products by name" value="<%= q || '' %>" />
+                <button type="submit" class="btn btn-primary btn-sm">Search</button>
+            </form>
+            <% if (q) { %><a href="/" class="btn btn-home btn-sm">Clear</a>
+                <% } %>
+        </div>
+
+        <% if (message) { %>
+            <div class="alert alert-success">
+                <%= message %>
+            </div>
+            <% } %>
+
+                <% if (products && products.length) { %>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Price ($)</th>
+                                    <th>Unit in stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach((product) => { %>
+                                    <tr>
+                                        <td>
+                                            <%= product.id %>
+                                        </td>
+                                        <td><strong><%= product.name %></strong></td>
+                                        <td>
+                                            <% if (product.url_image) { %>
+                                                <img src="<%= product.url_image %>" class="img-thumb" alt="<%= product.name %>" />
+                                                <% } else { %>
+                                                    <em>No image</em>
+                                                    <% } %>
+                                        </td>
+                                        <td>
+                                            <%= (product.price || 0).toFixed(2) %>
+                                        </td>
+                                        <td>
+                                            <%= product.unit_in_stock || 0 %>
+                                        </td>
+                                        <td>
+                                            <a href="/detail/<%= product.id %>" class="btn btn-primary btn-sm">View</a>
+                                            <a href="/edit/<%= product.id %>" class="btn btn-warning btn-sm">Edit</a>
+                                            <form method="POST" action="/delete/<%= product.id %>" style="display:inline;" onsubmit="return confirm('Delete this product?');"><button type="submit" class="btn btn-danger btn-sm">Delete</button></form>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                        <p>No products found. <a href="/add">Add a new product</a></p>
+                        <% } %>
+    </div>
+</body>
+
+</html>

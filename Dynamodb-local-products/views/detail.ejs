@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Detail</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 25px 30px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
+        }
+        
+        h2 {
+            margin-bottom: 12px;
+        }
+        
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        
+        .label {
+            font-weight: 700;
+            color: #666;
+        }
+        
+        .value {
+            color: #333;
+        }
+        
+        .image-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .image-section img {
+            max-width: 280px;
+            max-height: 240px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            border-radius: 6px;
+            padding: 10px 14px;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>📄 Product Detail</h2>
+
+        <div class="image-section">
+            <% if (product.url_image) { %>
+                <img src="<%= product.url_image %>" alt="<%= product.name %>" />
+                <% } else { %>
+                    <div style="font-style: italic; color: #777;">No Image Available</div>
+                    <% } %>
+        </div>
+
+        <div class="row">
+            <div class="label">ID</div>
+            <div class="value">
+                <%= product.id %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="label">Name</div>
+            <div class="value">
+                <%= product.name %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="label">Price</div>
+            <div class="value">$
+                <%= (product.price || 0).toFixed(2) %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="label">Unit in Stock</div>
+            <div class="value">
+                <%= product.unit_in_stock || 0 %>
+            </div>
+        </div>
+
+        <a href="/" class="btn">← Back to list</a>
+        <a href="/edit/<%= product.id %>" class="btn" style="background:#28a745">Edit product</a>
+    </div>
+</body>
+
+</html>

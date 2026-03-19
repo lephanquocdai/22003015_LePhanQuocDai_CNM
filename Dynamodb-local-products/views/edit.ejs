@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 30px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            border-radius: 10px;
+            padding: 25px 30px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
+        }
+        
+        h2 {
+            margin-bottom: 5px;
+        }
+        
+        .field {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        
+        input[type=text],
+        input[type=number] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .btn-submit {
+            background: #007bff;
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+        }
+        
+        .alert {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .preview {
+            margin-bottom: 12px;
+        }
+        
+        .preview img {
+            width: 120px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>✏️ Edit Product</h2>
+
+        <% if (error) { %>
+            <div class="alert">
+                <%= error %>
+            </div>
+            <% } %>
+
+                <form action="/edit/<%= product.id %>" method="POST" enctype="multipart/form-data">
+                    <div class="field"><label>Product ID</label><input type="text" value="<%= product.id %>" readonly /></div>
+                    <div class="field"><label>Name *</label><input type="text" name="name" required value="<%= product.name %>" /></div>
+                    <div class="field"><label>Price ($) *</label><input type="number" name="price" min="0" step="0.01" required value="<%= product.price %>" /></div>
+                    <div class="field"><label>Unit in stock *</label><input type="number" name="unit_in_stock" min="0" required value="<%= product.unit_in_stock %>" /></div>
+                    <div class="field"><label>Existing Image</label>
+                        <% if (product.url_image) { %>
+                            <div class="preview"><img src="<%= product.url_image %>" alt="product image" /></div>
+                            <% } else { %>
+                                <p><em>No image yet</em></p>
+                                <% } %>
+                    </div>
+                    <div class="field"><label>Image URL (or keep existing)</label><input type="text" name="url_image" value="<%= product.url_image || '' %>" /></div>
+                    <div class="field"><label>Upload new image (optional)</label><input type="file" name="image" accept="image/*" /></div>
+                    <button type="submit" class="btn btn-submit">Update</button>
+                    <a href="/" class="btn btn-cancel" style="text-decoration: none; margin-left:8px;">Cancel</a>
+                </form>
+    </div>
+</body>
+
+</html>
