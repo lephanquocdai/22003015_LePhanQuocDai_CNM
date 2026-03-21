@@ -7,14 +7,15 @@ const ProductController = {
     // ===== API: Create product =====
     createProduct: async(req, res) => {
         try {
-            const { id, name, price, unit_in_stock, url_image } = req.body;
+            const { ID, id, name, price, unit_in_stock, url_image } = req.body;
+            const finalID = ID || id;
 
-            if (!id || !name || price === undefined || unit_in_stock === undefined) {
+            if (!finalID || !name || price === undefined || unit_in_stock === undefined) {
                 return res.status(400).json({ message: 'Missing fields' });
             }
 
             const product = {
-                id,
+                ID: finalID,
                 name,
                 price: parseFloat(price),
                 unit_in_stock: parseInt(unit_in_stock, 10),
@@ -80,6 +81,16 @@ const ProductController = {
         }
     },
 
+    // ===== Web page: Delete product from form =====
+    deleteProductFromForm: async(req, res) => {
+        try {
+            await ProductModel.delete(req.params.id);
+            res.redirect('/?message=Product deleted successfully');
+        } catch (err) {
+            res.status(500).send('Error deleting product: ' + err.message);
+        }
+    },
+
     // ===== Web page: List products =====
     getProductsPage: async(req, res) => {
         try {
@@ -105,15 +116,25 @@ const ProductController = {
     // ===== Web page: Create product from form with S3 =====
     createProductFromForm: async(req, res) => {
         try {
-            const file = req.file;
-            const imagePath = file ? file.location : req.body.url_image || '';
+            let imagePath = req.body.url_image || '';
+            
+            if (req.file) {
+                const s3 = require('../config/s3');
+                const uploadResult = await s3.upload({
+                    Bucket: process.env.S3_BUCKET_NAME,
+                    Key: `${Date.now()}-${req.file.originalname}`,
+                    Body: req.file.buffer,
+                    ContentType: req.file.mimetype
+                }).promise();
+                imagePath = uploadResult.Location;
+            }
 
             if (!req.body.name || !req.body.price || !req.body.unit_in_stock) {
                 return res.render('add', { error: 'Name, price and stock are required.', form: req.body });
             }
 
             const product = {
-                id: `PROD-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
+                ID: `PROD-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
                 name: req.body.name.trim(),
                 price: parseFloat(req.body.price),
                 unit_in_stock: parseInt(req.body.unit_in_stock, 10),
@@ -142,13 +163,23 @@ const ProductController = {
     updateProductFromForm: async(req, res) => {
         try {
             const id = req.params.id;
-            const file = req.file;
             const existingData = await ProductModel.getById(id);
             if (!existingData.Item) return res.status(404).send('Product not found');
 
             let finalImage = existingData.Item.url_image || '';
-            if (file) finalImage = file.location;
-            else if (req.body.url_image && req.body.url_image.trim()) finalImage = req.body.url_image.trim();
+            
+            if (req.file) {
+                const s3 = require('../config/s3');
+                const uploadResult = await s3.upload({
+                    Bucket: process.env.S3_BUCKET_NAME,
+                    Key: `${Date.now()}-${req.file.originalname}`,
+                    Body: req.file.buffer,
+                    ContentType: req.file.mimetype
+                }).promise();
+                finalImage = uploadResult.Location;
+            } else if (req.body.url_image && req.body.url_image.trim()) {
+                finalImage = req.body.url_image.trim();
+            }
 
             await ProductModel.update(id, {
                 name: req.body.name.trim(),

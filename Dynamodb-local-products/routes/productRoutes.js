@@ -1,6 +1,6 @@
 const express = require('express');
 const ProductController = require('../controllers/productController');
-const upload = require('./config/uploadS3'); // import Multer-S3
+const upload = require('../config/uploadS3'); // import Multer-S3
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.get('/add', ProductController.addProductPage);
 router.post('/add', upload.single('image'), ProductController.createProductFromForm);
 router.get('/edit/:id', ProductController.editProductPage);
 router.post('/edit/:id', upload.single('image'), ProductController.updateProductFromForm);
-router.post('/delete/:id', ProductController.deleteProduct);
+router.post('/delete/:id', ProductController.deleteProductFromForm);
 router.get('/detail/:id', ProductController.detailProductPage);
 
 // API

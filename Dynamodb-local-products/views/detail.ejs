@@ -86,7 +86,7 @@
         <div class="row">
             <div class="label">ID</div>
             <div class="value">
-                <%= product.id %>
+                <%= product.ID || 'N/A' %>
             </div>
         </div>
         <div class="row">
@@ -98,7 +98,7 @@
         <div class="row">
             <div class="label">Price</div>
             <div class="value">$
-                <%= (product.price || 0).toFixed(2) %>
+                <%= parseFloat(product.price || 0).toFixed(2) %>
             </div>
         </div>
         <div class="row">
@@ -109,7 +109,7 @@
         </div>
 
         <a href="/" class="btn">← Back to list</a>
-        <a href="/edit/<%= product.id %>" class="btn" style="background:#28a745">Edit product</a>
+        <a href="/edit/<%= product.ID %>" class="btn" style="background:#28a745">Edit product</a>
     </div>
 </body>
 

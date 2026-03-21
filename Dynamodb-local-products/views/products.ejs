@@ -189,9 +189,9 @@
                                 <% products.forEach((product) => { %>
                                     <tr>
                                         <td>
-                                            <%= product.id %>
+                                            <%= product.ID || 'N/A' %>
                                         </td>
-                                        <td><strong><%= product.name %></strong></td>
+                                        <td><strong><%= product.name || 'Unnamed' %></strong></td>
                                         <td>
                                             <% if (product.url_image) { %>
                                                 <img src="<%= product.url_image %>" class="img-thumb" alt="<%= product.name %>" />
@@ -200,15 +200,17 @@
                                                     <% } %>
                                         </td>
                                         <td>
-                                            <%= (product.price || 0).toFixed(2) %>
+                                            <%= (typeof product.price !== 'undefined' ? parseFloat(product.price).toFixed(2) : '0.00') %>
                                         </td>
                                         <td>
                                             <%= product.unit_in_stock || 0 %>
                                         </td>
                                         <td>
-                                            <a href="/detail/<%= product.id %>" class="btn btn-primary btn-sm">View</a>
-                                            <a href="/edit/<%= product.id %>" class="btn btn-warning btn-sm">Edit</a>
-                                            <form method="POST" action="/delete/<%= product.id %>" style="display:inline;" onsubmit="return confirm('Delete this product?');"><button type="submit" class="btn btn-danger btn-sm">Delete</button></form>
+                                            <% if (product.ID) { %>
+                                                <a href="/detail/<%= product.ID %>" class="btn btn-primary btn-sm">View</a>
+                                                <a href="/edit/<%= product.ID %>" class="btn btn-warning btn-sm">Edit</a>
+                                                <form method="POST" action="/delete/<%= product.ID %>" style="display:inline;" onsubmit="return confirm('Delete this product?');"><button type="submit" class="btn btn-danger btn-sm">Delete</button></form>
+                                            <% } %>
                                         </td>
                                     </tr>
                                     <% }); %>
